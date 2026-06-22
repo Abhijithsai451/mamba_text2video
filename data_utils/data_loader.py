@@ -1,8 +1,8 @@
-from dotenv import load_dotenv
 from torchvision.io import VideoReader
+from dotenv import load_dotenv
 import os
 
 
 load_dotenv()
 
-reader =
+reader = VideoReader(os.getenv("VIDEO_PATH"))

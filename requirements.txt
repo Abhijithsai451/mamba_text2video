@@ -1,4 +1,7 @@
-torchvision
-pytorch
-mamba3-ssm
-causal-conv1d
+av
+torchvision<0.26.0
+python-dotenv
+torch
+datasets
+transformers
+mamba-ssm-macos
