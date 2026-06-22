@@ -1,0 +1,4 @@
+torchvision
+pytorch
+mamba3-ssm
+causal-conv1d
