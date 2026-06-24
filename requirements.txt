@@ -2,6 +2,7 @@ av
 torchvision<0.26.0
 python-dotenv
 torch
+pyarrow
 datasets
 transformers
 mamba-ssm-macos

@@ -9,3 +9,4 @@ def download_data():
                            token =os.getenv("HF_TOKEN")
                            )
     dataset.save_to_disk("data/")
+    return dataset
