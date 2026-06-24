@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader
 from datasets import load_from_disk, Dataset
 from transformers import AutoTokenizer
 
+from data_utils.data_import import download_data
+
 load_dotenv()
 
 dataset_path = os.getenv("DATASET_PATH")
@@ -12,19 +14,20 @@ tokenizer_name = os.getenv("TOKENIZER")
 tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
 
 
-def download_data():
+def load_data():
     if not os.path.exists(dataset_path):
-        dataset = download_data
+        dataset = download_data()
     else:
         dataset = load_from_disk(dataset_path)
+    return dataset
 
 def cinepile_collate_fn(batch):
     """
     Custom collate function to handle the required fields in the dataset
     """
-    video_ids = [item['video_id'] for item in batch]
+    video_ids = [item['videoID'] for item in batch]
     movie_names = [item['movie_name'] for item in batch]
-    genres = [item['genres'] for item in batch]
+    genres = [item['genre'] for item in batch]
 
     labels = torch.tensor([int(item['answer_key_position']) for item in batch], dtype=torch.long)
     questions = [item['question'] for item in batch]
@@ -77,7 +80,9 @@ def cinepile_collate_fn(batch):
     }
 
 
-def load_video_data(dataset: Dataset, ):
+def load_video_data():
+    raw_dataset = load_data()
+    dataset = raw_dataset['train']
     dataloader = DataLoader(
         dataset = dataset,
         batch_size = 4,
@@ -86,6 +91,7 @@ def load_video_data(dataset: Dataset, ):
         num_workers = 4,
         pin_memory = True
     )
+    return dataloader
 
 
 
