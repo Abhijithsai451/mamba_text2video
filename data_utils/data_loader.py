@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from datasets import load_from_disk, Dataset
 from transformers import AutoTokenizer
 
-from data_utils.data_import import download_data
+from data_utils.download_data import download
 
 load_dotenv()
 
@@ -16,7 +16,7 @@ tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
 
 def load_data():
     if not os.path.exists(dataset_path):
-        dataset = download_data()
+        dataset = download()
     else:
         dataset = load_from_disk(dataset_path)
     return dataset
@@ -35,7 +35,7 @@ def cinepile_collate_fn(batch):
 
     tokenized_text = tokenizer(
         questions,
-        text_pair=subtitles,  # Optionally pair the question with subtitles as context
+        text_pair=subtitles,
         padding=True,
         truncation=True,
         max_length=512,
@@ -55,12 +55,9 @@ def cinepile_collate_fn(batch):
         all_choices_ids.append(tokenized_choices['input_ids'])  # Shape: [num_choices, seq_len]
         all_choices_masks.append(tokenized_choices['attention_mask'])  # Shape: [num_choices, seq_len]
 
-    # Stack individual samples into uniform batch tensors
-    # Resulting shape: [batch_size, num_choices, seq_len]
     choices_input_ids = torch.stack(all_choices_ids)
     choices_attention_mask = torch.stack(all_choices_masks)
 
-    # --- Construct Final Batch Dictionary ---
     return {
         # Metadata
         "video_ids": video_ids,
