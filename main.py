@@ -1,26 +1,20 @@
 from data_utils.data_import import download_data
+from data_utils.data_loader import load_video_data
 
 
 def app():
+    print("\nTesting DataLoader iteration...")
 
-    download_data()
-    import torchvision
-
-    # 1. Verify torchvision can see the PyAV backend
-    backends = torchvision.io.get_video_backends()
-    print(f"Available video backends: {backends}")
-
-    # 2. Try initializing the VideoReader
-    try:
-        from torchvision.io import VideoReader
-        print("Success: VideoReader imported smoothly!")
-    except ImportError:
-        # If the IDE still complains but 'av' is in the backends list,
-        # you can access it dynamically like this:
-        if hasattr(torchvision.io, 'VideoReader'):
-            print("Success: VideoReader exists dynamically via torchvision.io")
-        else:
-            print("VideoReader is not exposed. Use torchvision.io.read_video instead.")
+    # Grab just the first batch to verify structure
+    dataloader = load_video_data()
+    for i, batch in enumerate(dataloader):
+        print("\n--- Batch Structure Successfully Generated ---")
+        print(f"Batch index: {i}")
+        print(f"Metadata (Video IDs): {batch['video_ids']}")
+        print(f"Main Input IDs Shape: {batch['input_ids'].shape} (Padded uniformly!)")
+        print(f"Choices Input IDs Shape: {batch['choices_input_ids'].shape} [Batch, Choices, Seq_len]")
+        print(f"Labels Tensor: {batch['labels']}")
+        break
 
 if __name__ == "__main__":
     app()
