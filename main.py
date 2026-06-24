@@ -1,4 +1,4 @@
-from data_utils.data_import import download_data
+from data_utils.download_data import download
 from data_utils.data_loader import load_video_data
 
 

@@ -1,5 +1,6 @@
 av
 torchvision<0.26.0
+torchcodec
 python-dotenv
 torch
 pyarrow
