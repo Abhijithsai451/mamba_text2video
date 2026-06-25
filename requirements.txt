@@ -1,4 +1,5 @@
 av
+yt-dlp
 torchvision<0.26.0
 torchcodec
 python-dotenv
